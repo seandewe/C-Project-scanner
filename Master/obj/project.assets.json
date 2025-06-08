@@ -2,28 +2,28 @@
   "version": 3,
   "targets": {
     "net9.0": {
-      "shared/1.0.0": {
+      "Shared/1.0.0": {
         "type": "project",
         "framework": ".NETCoreApp,Version=v9.0",
         "compile": {
-          "bin/placeholder/shared.dll": {}
+          "bin/placeholder/Shared.dll": {}
         },
         "runtime": {
-          "bin/placeholder/shared.dll": {}
+          "bin/placeholder/Shared.dll": {}
         }
       }
     }
   },
   "libraries": {
-    "shared/1.0.0": {
+    "Shared/1.0.0": {
       "type": "project",
-      "path": "../Shared/shared.csproj",
-      "msbuildProject": "../Shared/shared.csproj"
+      "path": "../Shared/Shared.csproj",
+      "msbuildProject": "../Shared/Shared.csproj"
     }
   },
   "projectFileDependencyGroups": {
     "net9.0": [
-      "shared >= 1.0.0"
+      "Shared >= 1.0.0"
     ]
   },
   "packageFolders": {
@@ -51,8 +51,8 @@
         "net9.0": {
           "targetAlias": "net9.0",
           "projectReferences": {
-            "C:\\Users\\HP\\Documents\\Project scanner\\C-Project-scanner\\Shared\\shared.csproj": {
-              "projectPath": "C:\\Users\\HP\\Documents\\Project scanner\\C-Project-scanner\\Shared\\shared.csproj"
+            "C:\\Users\\HP\\Documents\\Project scanner\\C-Project-scanner\\Shared\\Shared.csproj": {
+              "projectPath": "C:\\Users\\HP\\Documents\\Project scanner\\C-Project-scanner\\Shared\\Shared.csproj"
             }
           }
         }

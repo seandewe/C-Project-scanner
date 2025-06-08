@@ -1,15 +1,15 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\HP\\Documents\\Project scanner\\C-Project-scanner\\Shared\\shared.csproj": {}
+    "C:\\Users\\HP\\Documents\\Project scanner\\C-Project-scanner\\Shared\\Shared.csproj": {}
   },
   "projects": {
-    "C:\\Users\\HP\\Documents\\Project scanner\\C-Project-scanner\\Shared\\shared.csproj": {
+    "C:\\Users\\HP\\Documents\\Project scanner\\C-Project-scanner\\Shared\\Shared.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\HP\\Documents\\Project scanner\\C-Project-scanner\\Shared\\shared.csproj",
-        "projectName": "shared",
-        "projectPath": "C:\\Users\\HP\\Documents\\Project scanner\\C-Project-scanner\\Shared\\shared.csproj",
+        "projectUniqueName": "C:\\Users\\HP\\Documents\\Project scanner\\C-Project-scanner\\Shared\\Shared.csproj",
+        "projectName": "Shared",
+        "projectPath": "C:\\Users\\HP\\Documents\\Project scanner\\C-Project-scanner\\Shared\\Shared.csproj",
         "packagesPath": "C:\\Users\\HP\\.nuget\\packages\\",
         "outputPath": "C:\\Users\\HP\\Documents\\Project scanner\\C-Project-scanner\\Shared\\obj\\",
         "projectStyle": "PackageReference",

@@ -26,8 +26,8 @@
           "net9.0": {
             "targetAlias": "net9.0",
             "projectReferences": {
-              "C:\\Users\\HP\\Documents\\Project scanner\\C-Project-scanner\\Shared\\shared.csproj": {
-                "projectPath": "C:\\Users\\HP\\Documents\\Project scanner\\C-Project-scanner\\Shared\\shared.csproj"
+              "C:\\Users\\HP\\Documents\\Project scanner\\C-Project-scanner\\Shared\\Shared.csproj": {
+                "projectPath": "C:\\Users\\HP\\Documents\\Project scanner\\C-Project-scanner\\Shared\\Shared.csproj"
               }
             }
           }
@@ -67,12 +67,12 @@
         }
       }
     },
-    "C:\\Users\\HP\\Documents\\Project scanner\\C-Project-scanner\\Shared\\shared.csproj": {
+    "C:\\Users\\HP\\Documents\\Project scanner\\C-Project-scanner\\Shared\\Shared.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\HP\\Documents\\Project scanner\\C-Project-scanner\\Shared\\shared.csproj",
-        "projectName": "shared",
-        "projectPath": "C:\\Users\\HP\\Documents\\Project scanner\\C-Project-scanner\\Shared\\shared.csproj",
+        "projectUniqueName": "C:\\Users\\HP\\Documents\\Project scanner\\C-Project-scanner\\Shared\\Shared.csproj",
+        "projectName": "Shared",
+        "projectPath": "C:\\Users\\HP\\Documents\\Project scanner\\C-Project-scanner\\Shared\\Shared.csproj",
         "packagesPath": "C:\\Users\\HP\\.nuget\\packages\\",
         "outputPath": "C:\\Users\\HP\\Documents\\Project scanner\\C-Project-scanner\\Shared\\obj\\",
         "projectStyle": "PackageReference",
