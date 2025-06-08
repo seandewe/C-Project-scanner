@@ -2,6 +2,8 @@
 using System.Text;
 using System.Text.Json;
 using Shared;
+using System.Diagnostics;
+using System.Runtime.InteropServices;
 
 namespace MasterApp
 {
@@ -9,6 +11,8 @@ namespace MasterApp
     {
         static void Main(string[] args)
         {
+            SetProcessorAffinity(0); // Set Master to Core 0
+
             Console.WriteLine("Master started. Waiting for agents...");
 
             var allEntries = new List<WordIndexEntry>();
@@ -42,7 +46,6 @@ namespace MasterApp
                     using (StreamReader reader = new StreamReader(pipeServer, Encoding.UTF8))
                     {
                         string json = reader.ReadToEnd();
-
                         var entries = JsonSerializer.Deserialize<List<WordIndexEntry>>(json);
 
                         if (entries != null)
@@ -65,6 +68,12 @@ namespace MasterApp
             {
                 Console.WriteLine($"Error receiving from {pipeName}: {ex.Message}");
             }
+        }
+
+        static void SetProcessorAffinity(int core)
+        {
+            Process proc = Process.GetCurrentProcess();
+            proc.ProcessorAffinity = (IntPtr)(1 << core);
         }
     }
 }

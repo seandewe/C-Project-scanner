@@ -3,6 +3,7 @@ using Shared;
 using System.IO.Pipes;
 using System.Text;
 using System.Text.Json;
+using System.Diagnostics;
 
 namespace ScannerB
 {
@@ -10,6 +11,8 @@ namespace ScannerB
     {
         static void Main(string[] args)
         {
+            SetProcessorAffinity(2); // Set to core 2
+
             Console.WriteLine("Enter the path to the directory containing .txt files:");
             string directoryPath = Console.ReadLine();
 
@@ -20,7 +23,7 @@ namespace ScannerB
             }
 
             List<WordIndexEntry> index = new();
-            string pipeName = "agent2"; // Set to agent1 for ScannerA, agent2 for ScannerB
+            string pipeName = "agent2"; // Match with Master pipe
 
             Thread readThread = new(() =>
             {
@@ -30,8 +33,7 @@ namespace ScannerB
 
             Thread sendThread = new(() =>
             {
-                readThread.Join(); // Wait until reading/indexing is done
-
+                readThread.Join(); // Ensure reading finishes before sending
                 SendDataOverNamedPipe(index, pipeName);
             });
 
@@ -42,6 +44,12 @@ namespace ScannerB
             sendThread.Join();
         }
 
+        static void SetProcessorAffinity(int core)
+        {
+            Process proc = Process.GetCurrentProcess();
+            proc.ProcessorAffinity = (IntPtr)(1 << core);
+        }
+
         static void SendDataOverNamedPipe(List<WordIndexEntry> entries, string pipeName)
         {
             try
@@ -49,7 +57,7 @@ namespace ScannerB
                 using (NamedPipeClientStream pipeClient = new NamedPipeClientStream(".", pipeName, PipeDirection.Out))
                 {
                     Console.WriteLine($"Connecting to master on pipe '{pipeName}'...");
-                    pipeClient.Connect(); // waits for master
+                    pipeClient.Connect(); // Waits for master
 
                     string json = JsonSerializer.Serialize(entries);
                     byte[] buffer = Encoding.UTF8.GetBytes(json);

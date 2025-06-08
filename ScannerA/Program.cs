@@ -3,6 +3,7 @@ using Shared;
 using System.IO.Pipes;
 using System.Text;
 using System.Text.Json;
+using System.Diagnostics;
 
 namespace ScannerA
 {
@@ -10,6 +11,8 @@ namespace ScannerA
     {
         static void Main(string[] args)
         {
+            SetProcessorAffinity(1); // Set to core 1
+
             Console.WriteLine("Enter the path to the directory containing .txt files:");
             string directoryPath = Console.ReadLine();
 
@@ -20,7 +23,7 @@ namespace ScannerA
             }
 
             List<WordIndexEntry> index = new();
-            string pipeName = "agent1"; 
+            string pipeName = "agent1";
 
             Thread readThread = new(() =>
             {
@@ -30,8 +33,7 @@ namespace ScannerA
 
             Thread sendThread = new(() =>
             {
-                readThread.Join(); 
-
+                readThread.Join(); // Wait until reading/indexing is done
                 SendDataOverNamedPipe(index, pipeName);
             });
 
@@ -40,6 +42,12 @@ namespace ScannerA
 
             readThread.Join();
             sendThread.Join();
+        }
+
+        static void SetProcessorAffinity(int core)
+        {
+            Process proc = Process.GetCurrentProcess();
+            proc.ProcessorAffinity = (IntPtr)(1 << core);
         }
 
         static void SendDataOverNamedPipe(List<WordIndexEntry> entries, string pipeName)
