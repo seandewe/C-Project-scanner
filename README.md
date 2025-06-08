@@ -1,2 +1,5 @@
-# C-Project-scanner
-C# distributed system with named pipes, multithreading, and processor affinity
+## Task 1: Project Initialization
+
+- Created GitHub repo and cloned locally
+- Created 4 folders: Master, ScannerA, ScannerB, Shared
+- Initialized each as a .NET project
