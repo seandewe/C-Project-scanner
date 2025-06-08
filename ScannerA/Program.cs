@@ -4,52 +4,67 @@ using System.IO.Pipes;
 using System.Text;
 using System.Text.Json;
 
-
 namespace ScannerA
 {
     class Program
     {
         static void Main(string[] args)
-{
-    Console.WriteLine("Enter the path to the directory containing .txt files:");
-    string directoryPath = Console.ReadLine();
-
-    if (!Directory.Exists(directoryPath))
-    {
-        Console.WriteLine("Directory does not exist.");
-        return;
-    }
-
-    var index = BuildIndexFromDirectory(directoryPath);
-    string pipeName = "agent1";  // This should match the pipe name used by the master process
-
-    SendDataOverNamedPipe(index, pipeName);
-}
-
-static void SendDataOverNamedPipe(List<WordIndexEntry> entries, string pipeName)
-{
-    try
-    {
-        using (NamedPipeClientStream pipeClient = new NamedPipeClientStream(".", pipeName, PipeDirection.Out))
         {
-            Console.WriteLine($"Connecting to master on pipe '{pipeName}'...");
-            pipeClient.Connect(); // waits for master
+            Console.WriteLine("Enter the path to the directory containing .txt files:");
+            string directoryPath = Console.ReadLine();
 
-            string json = JsonSerializer.Serialize(entries);
-            byte[] buffer = Encoding.UTF8.GetBytes(json);
+            if (!Directory.Exists(directoryPath))
+            {
+                Console.WriteLine("Directory does not exist.");
+                return;
+            }
 
-            pipeClient.Write(buffer, 0, buffer.Length);
-            pipeClient.Flush();
+            List<WordIndexEntry> index = new();
+            string pipeName = "agent1"; 
 
-            Console.WriteLine("Data sent to master successfully.");
+            Thread readThread = new(() =>
+            {
+                index = BuildIndexFromDirectory(directoryPath);
+                Console.WriteLine("Finished indexing files.");
+            });
+
+            Thread sendThread = new(() =>
+            {
+                readThread.Join(); 
+
+                SendDataOverNamedPipe(index, pipeName);
+            });
+
+            readThread.Start();
+            sendThread.Start();
+
+            readThread.Join();
+            sendThread.Join();
         }
-    }
-    catch (Exception ex)
-    {
-        Console.WriteLine($"Failed to send data: {ex.Message}");
-    }
-}
 
+        static void SendDataOverNamedPipe(List<WordIndexEntry> entries, string pipeName)
+        {
+            try
+            {
+                using (NamedPipeClientStream pipeClient = new NamedPipeClientStream(".", pipeName, PipeDirection.Out))
+                {
+                    Console.WriteLine($"Connecting to master on pipe '{pipeName}'...");
+                    pipeClient.Connect(); // waits for master
+
+                    string json = JsonSerializer.Serialize(entries);
+                    byte[] buffer = Encoding.UTF8.GetBytes(json);
+
+                    pipeClient.Write(buffer, 0, buffer.Length);
+                    pipeClient.Flush();
+
+                    Console.WriteLine("Data sent to master successfully.");
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Failed to send data: {ex.Message}");
+            }
+        }
 
         static List<WordIndexEntry> BuildIndexFromDirectory(string directoryPath)
         {
@@ -90,4 +105,3 @@ static void SendDataOverNamedPipe(List<WordIndexEntry> entries, string pipeName)
         }
     }
 }
-// This code reads text files from a specified directory, counts the occurrences of each word in those files,
