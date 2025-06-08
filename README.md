@@ -1,8 +1,7 @@
-## Task 3: ScannerA Word Indexing
+## Task 4 (Part 1): Named Pipe Communication - ScannerA
 
-- Implemented logic in `ScannerA` to:
-  - Ask for a directory containing `.txt` files
-  - Read all `.txt` files
-  - Tokenize and count word occurrences using regex
-  - Output results as `filename:word:count` format
-  - Tested with sample input: "Hello my name is Sean"
+- Updated `ScannerA` to:
+  - Serialize the word index to JSON
+  - Connect to Master via named pipe `"agent1"`
+  - Send the data over the pipe
+
