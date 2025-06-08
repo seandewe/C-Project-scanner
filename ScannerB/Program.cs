@@ -1,31 +1,55 @@
 ﻿using System.Text.RegularExpressions;
 using Shared;
+using System.IO.Pipes;
+using System.Text;
+using System.Text.Json;
+
 
 namespace ScannerA
 {
     class Program
     {
         static void Main(string[] args)
+{
+    Console.WriteLine("Enter the path to the directory containing .txt files:");
+    string directoryPath = Console.ReadLine();
+
+    if (!Directory.Exists(directoryPath))
+    {
+        Console.WriteLine("Directory does not exist.");
+        return;
+    }
+
+    var index = BuildIndexFromDirectory(directoryPath);
+    string pipeName = "agent2";  // This should match the pipe name used by the master process
+
+    SendDataOverNamedPipe(index, pipeName);
+}
+
+static void SendDataOverNamedPipe(List<WordIndexEntry> entries, string pipeName)
+{
+    try
+    {
+        using (NamedPipeClientStream pipeClient = new NamedPipeClientStream(".", pipeName, PipeDirection.Out))
         {
-            Console.WriteLine("Enter the path to the directory containing .txt files:");
-            string directoryPath = Console.ReadLine();
+            Console.WriteLine($"Connecting to master on pipe '{pipeName}'...");
+            pipeClient.Connect(); // waits for master
 
-            if (!Directory.Exists(directoryPath))
-            {
-                Console.WriteLine("Directory does not exist.");
-                return;
-            }
+            string json = JsonSerializer.Serialize(entries);
+            byte[] buffer = Encoding.UTF8.GetBytes(json);
 
-            var index = BuildIndexFromDirectory(directoryPath);
+            pipeClient.Write(buffer, 0, buffer.Length);
+            pipeClient.Flush();
 
-            // Display results locally 
-            foreach (var entry in index)
-            {
-                Console.WriteLine(entry.ToString());
-            }
-
-            
+            Console.WriteLine("Data sent to master successfully.");
         }
+    }
+    catch (Exception ex)
+    {
+        Console.WriteLine($"Failed to send data: {ex.Message}");
+    }
+}
+
 
         static List<WordIndexEntry> BuildIndexFromDirectory(string directoryPath)
         {
@@ -67,5 +91,3 @@ namespace ScannerA
     }
 }
 // This code reads text files from a specified directory, counts the occurrences of each word in those files,
-
-
